@@ -5,7 +5,7 @@ resource "null_resource" "function_binary" {
   }
   provisioner "local-exec" {
     command = <<EOT
-    cd ${path.module_path}
+    cd ${var.module_path}
     go version
     go mod tidy
     export CGO_ENABLED=0
@@ -20,12 +20,12 @@ resource "null_resource" "function_binary" {
 data "archive_file" "lambda" {
   depends_on  = [null_resource.function_binary]
   type        = "zip"
-  source_file = "${path.module_path}/bootstrap"
+  source_file = "${var.module_path}/bootstrap"
   output_path = "bootstrap.zip"
 }
 
 resource "aws_cloudwatch_log_group" "log_group" {
-  name              = "/aws/lambda/${aws_lambda_function.lambda.function_name}"
+  name              = "/aws/lambda/${var.lambda_function_name}"
   retention_in_days = var.log_retention_in_days
   kms_key_id        = var.cloudwatch_logging_kms_key_id
 }

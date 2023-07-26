@@ -37,12 +37,3 @@ resource "aws_lambda_event_source_mapping" "allow_dynamodb_table_to_trigger_lamb
   parallelization_factor         = var.parallelization_factor
   bisect_batch_on_function_error = true
 }
-
-# Code for EventBridge Trigger
-#resource "aws_lambda_permission" "this" {
-#  statement_id  = "AllowExecutionFromEventBridge"
-#  action        = "lambda:InvokeFunction"
-#  function_name = module.dynamodb-cdc-sync.function_name
-#  principal     = "events.amazonaws.com"
-#  source_arn    = "arn:aws:events:${local.aws_region}:${local.aws_account_id}:*/*/*"
-#}

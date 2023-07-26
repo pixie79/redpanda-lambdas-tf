@@ -2,7 +2,6 @@ locals {
   rudderstack_lambda_function_name = "${local.generic_name}-rudderstack"
 }
 
-
 module "rudderstack_sync" {
   count       = length(var.rudderstack_account_ids) > 0 ? 1 : 0
   source      = "./modules/lambda"
@@ -85,4 +84,13 @@ resource "aws_iam_role" "this" {
     name   = "policy-allow-events"
     policy = data.aws_iam_policy_document.rudderstack.json
   }
+}
+
+resource "aws_lambda_permission" "this" {
+  count         = length(var.rudderstack_account_ids) > 0 ? 1 : 0
+  statement_id  = local.rudderstack_lambda_function_name
+  action        = "lambda:InvokeFunction"
+  function_name = module.rudderstack_sync[0].function_name
+  principal     = "events.amazonaws.com"
+  source_arn    = module.event-bridge-rudderstack_sync[0].eventbridge_bus_arn
 }

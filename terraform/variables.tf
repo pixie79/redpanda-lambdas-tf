@@ -71,6 +71,34 @@ variable "additional_kms_policies" {
   description = "List of additional KMS policies to add to the base policy"
 }
 
+
+####################################
+## DynamoDB Sync Variables
+####################################
+
+variable "source_dynamodb_table_arns" {
+  default     = []
+  type        = list(string)
+  description = "List of DynamoDB table ARNs to allow access to"
+}
+
+variable "parallelization_factor" {
+  default     = 2
+  description = "The number of shards to create for the stream. The default value is 1."
+  type        = number
+}
+
+####################################
+## Rudderstack Sync Variables
+####################################
+
+variable "rudderstack_account_ids" {
+  default     = []
+  description = "The AWS account ID of the Rudderstack account"
+  type        = list(string)
+}
+
+
 ####################################
 ## DataDog Variables
 ####################################

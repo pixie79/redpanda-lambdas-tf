@@ -2,14 +2,15 @@
 // All Rights Reserved
 // Distributed under the terms of the MIT License.
 
-// Package main - an AWS Lambda function to send DynamoDB Stream events to a Kafka topic
+// Package main - an AWS Lambda function to send Eventbridge events to a Kafka topic
 package main
 
 import (
 	"context"
 	"encoding/json"
 	"fmt"
-	datautils "github.com/pixie79/data-utils"
+	"github.com/aws/aws-lambda-go/events"
+	"github.com/pixie79/data-utils/types"
 
 	ddLambda "github.com/DataDog/datadog-lambda-go" // Datadog Lambda wrapper
 	"github.com/aws/aws-lambda-go/lambda"           // AWS Lambda wrapper
@@ -24,7 +25,7 @@ func main() {
 }
 
 // myHandler is the Lambda function handler
-func myHandler(ctx context.Context, event datautils.DynamoDBStreamEvent) {
+func myHandler(ctx context.Context, event events.CloudWatchEvent) {
 	utils.Logger.Info(fmt.Sprintf("Running Lambda against region: %s", utils.GetEnv("AWS_REGION", "eu-west-1")))
 
 	if utils.LogLevel == "DEBUG" {
@@ -35,6 +36,6 @@ func myHandler(ctx context.Context, event datautils.DynamoDBStreamEvent) {
 
 	credentialsKey := utils.GetEnv("KAFKA_CREDENTIALS_KEY", "kafka_credentials_key")
 	credentials := aws.FetchCredentials(credentialsKey)
-	EventPayload, ctx := aws.DynamoDbCreateEvent(ctx, event, []byte(""))
+	EventPayload, ctx := aws.CloudWatchCreateEvent(ctx, types.CloudWatchEvent(event), []byte(""))
 	kafka.CreateConnectionAndSubmitRecords(ctx, EventPayload, credentials)
 }

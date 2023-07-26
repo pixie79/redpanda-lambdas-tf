@@ -1,11 +1,11 @@
-module dynamodb-cdc-kafka
+module dynamodb-cdc-sync-kafka
 
 go 1.20
 
 require (
 	github.com/DataDog/datadog-lambda-go v1.9.0
 	github.com/aws/aws-lambda-go v1.41.0
-	github.com/pixie79/data-utils v0.0.9
+	github.com/pixie79/data-utils v0.0.11
 )
 
 require (

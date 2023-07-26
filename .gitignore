@@ -1,3 +1,5 @@
 /terraform/.terraform.lock.hcl
 /terraform/.terraform/
 .idea
+/terraform/modules/lambda/.terraform.lock.hcl
+/terraform/modules/lambda/.terraform/

@@ -55,6 +55,28 @@ data "aws_iam_policy_document" "lambda_execution_policy" {
       "arn:aws:kms:${local.aws_region}:${local.aws_account_id}:key/*"
     ]
   }
+
+  dynamic "statement" {
+    for_each = var.source_dynamodb_table_arns
+
+    content {
+      effect = "Allow"
+      actions = [
+        "dynamodb:BatchGetItem",
+        "dynamodb:GetItem",
+        "dynamodb:GetRecords",
+        "dynamodb:Scan",
+        "dynamodb:Query",
+        "dynamodb:GetShardIterator",
+        "dynamodb:DescribeStream",
+        "dynamodb:ListStreams"
+      ]
+      resources = [
+        statement.value,
+        "${statement.value}/*"
+      ]
+    }
+  }
 }
 
 data "aws_iam_policy_document" "base_kms_policy" {

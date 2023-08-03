@@ -5,7 +5,7 @@ go 1.20
 require (
 	github.com/DataDog/datadog-lambda-go v1.9.0
 	github.com/aws/aws-lambda-go v1.41.0
-	github.com/pixie79/data-utils v0.0.11
+	github.com/pixie79/data-utils v0.0.14
 )
 
 require (
@@ -17,12 +17,12 @@ require (
 	github.com/Microsoft/go-winio v0.5.2 // indirect
 	github.com/andybalholm/brotli v1.0.4 // indirect
 	github.com/aws/aws-sdk-go v1.44.300 // indirect
-	github.com/aws/aws-sdk-go-v2 v1.17.3 // indirect
+	github.com/aws/aws-sdk-go-v2 v1.19.0 // indirect
 	github.com/aws/aws-sdk-go-v2/config v1.18.5 // indirect
 	github.com/aws/aws-sdk-go-v2/credentials v1.13.5 // indirect
 	github.com/aws/aws-sdk-go-v2/feature/ec2/imds v1.12.21 // indirect
-	github.com/aws/aws-sdk-go-v2/internal/configsources v1.1.27 // indirect
-	github.com/aws/aws-sdk-go-v2/internal/endpoints/v2 v2.4.21 // indirect
+	github.com/aws/aws-sdk-go-v2/internal/configsources v1.1.35 // indirect
+	github.com/aws/aws-sdk-go-v2/internal/endpoints/v2 v2.4.29 // indirect
 	github.com/aws/aws-sdk-go-v2/internal/ini v1.3.28 // indirect
 	github.com/aws/aws-sdk-go-v2/service/internal/presigned-url v1.9.21 // indirect
 	github.com/aws/aws-sdk-go-v2/service/kms v1.19.2 // indirect

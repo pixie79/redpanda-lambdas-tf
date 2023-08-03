@@ -3,3 +3,5 @@
 .idea
 /terraform/modules/lambda/.terraform.lock.hcl
 /terraform/modules/lambda/.terraform/
+/terraform/lambda-src/apigw-proxy-kafka/bootstrap.zip
+/terraform/lambda-src/apigw-proxy-kafka/bootstrap

@@ -1,4 +1,4 @@
-module eventbdige-sync-kafka
+module apigw-proxy-kafka
 
 go 1.20
 

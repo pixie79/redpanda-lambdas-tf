@@ -30,11 +30,14 @@ func myHandler(ctx context.Context, event events.DynamoDBEvent) {
 		rawEvent, err := json.Marshal(event)
 		utils.MaybeDie(err, "unable to parse raw event: %+v")
 		utils.Logger.Debug(fmt.Sprintf("raw event %s", rawEvent))
+		rawCtx, err := json.Marshal(ctx)
+		utils.MaybeDie(err, "unable to parse raw event: %+v")
+		utils.Logger.Debug(fmt.Sprintf("raw context %s", rawCtx))
 	}
 
 	credentialsKey := utils.GetEnv("KAFKA_CREDENTIALS_KEY", "kafka_credentials_key")
 	credentials := aws.FetchCredentials(credentialsKey)
 	convertedEvent := aws.MarshalDynamoDBEventToLocal(event)
-	EventPayload, ctx := aws.DynamoDbCreateEvent(ctx, convertedEvent, []byte(""))
-	kafka.CreateConnectionAndSubmitRecords(ctx, EventPayload, credentials)
+	eventPayload, ctx := aws.DynamoDbCreateKafkaEvent(ctx, convertedEvent, []byte(""))
+	kafka.CreateConnectionAndSubmitRecords(ctx, eventPayload, credentials)
 }

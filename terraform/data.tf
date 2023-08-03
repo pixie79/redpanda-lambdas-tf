@@ -23,12 +23,24 @@ data "aws_vpc" "this" {
 data "aws_iam_policy_document" "lambda_execution_policy" {
   statement {
     effect    = "Allow"
-    resources = ["*"]
-
+    resources = ["arn:aws:logs:${local.aws_region}:${local.aws_account_id}:*"]
     actions = [
-      "logs:CreateLogGroup",
+      "logs:CreateLogGroup"
+    ]
+  }
+  statement {
+    effect    = "Allow"
+    resources = ["arn:aws:logs:${local.aws_region}:${local.aws_account_id}:log-group:/aws/lambda/${local.generic_name}*:*"]
+    actions = [
       "logs:CreateLogStream",
-      "logs:PutLogEvents",
+      "logs:PutLogEvents"
+    ]
+  }
+
+  statement {
+    effect    = "Allow"
+    resources = ["*"]
+    actions = [
       "cloudwatch:PutMetricData",
       "ec2:CreateNetworkInterface",
       "ec2:DescribeNetworkInterfaces",
@@ -43,6 +55,7 @@ data "aws_iam_policy_document" "lambda_execution_policy" {
       "xray:PutTelemetryRecords"
     ]
   }
+
   statement {
     actions = [
       "kms:Decrypt",

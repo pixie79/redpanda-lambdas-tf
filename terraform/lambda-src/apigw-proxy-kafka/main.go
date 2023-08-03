@@ -2,30 +2,23 @@
 // All Rights Reserved
 // Distributed under the terms of the MIT License.
 
-// Package main - an AWS Lambda function to send Eventbridge events to a Kafka topic
+// Package main - an AWS Lambda function to send APIGW Payload events to a Kafka topic
 package main
 
 import (
 	"context"
 	"encoding/json"
 	"fmt"
+	ddLambda "github.com/DataDog/datadog-lambda-go"
 	"github.com/aws/aws-lambda-go/events"
-	"github.com/pixie79/data-utils/types"
-
-	ddLambda "github.com/DataDog/datadog-lambda-go" // Datadog Lambda wrapper
-	"github.com/aws/aws-lambda-go/lambda"           // AWS Lambda wrapper
+	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/pixie79/data-utils/aws"
 	"github.com/pixie79/data-utils/kafka"
-	"github.com/pixie79/data-utils/utils" // Utils functions
+	"github.com/pixie79/data-utils/types"
+	"github.com/pixie79/data-utils/utils"
 )
 
-// main is the entry point for the Lambda function
-func main() {
-	lambda.Start(ddLambda.WrapFunction(myHandler, nil))
-}
-
-// myHandler is the Lambda function handler
-func myHandler(ctx context.Context, event events.CloudWatchEvent) {
+func myHandler(ctx context.Context, event events.APIGatewayProxyRequest) (types.LambdaProxyResponse, error) {
 	utils.Logger.Info(fmt.Sprintf("Running Lambda against region: %s", utils.GetEnv("AWS_REGION", "eu-west-1")))
 
 	if utils.LogLevel == "DEBUG" {
@@ -39,6 +32,13 @@ func myHandler(ctx context.Context, event events.CloudWatchEvent) {
 
 	credentialsKey := utils.GetEnv("KAFKA_CREDENTIALS_KEY", "kafka_credentials_key")
 	credentials := aws.FetchCredentials(credentialsKey)
-	eventPayload, ctx := aws.CloudWatchCreateKafkaEvent(ctx, types.CloudWatchEvent(event), []byte(""))
+	eventPayload, ctx := aws.ApiGwCreateKafkaEvent(ctx, event, []byte(""))
 	kafka.CreateConnectionAndSubmitRecords(ctx, eventPayload, credentials)
+
+	return types.LambdaProxyResponse{Body: "OK", StatusCode: 200}, nil
+}
+
+// main is the entry point for the Lambda function
+func main() {
+	lambda.Start(ddLambda.WrapFunction(myHandler, nil))
 }
